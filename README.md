@@ -3,4 +3,4 @@
 ### 02-11-2020
 Added a home page, add task activity and all tasks activity.
 
-![Homepage](assets/home)
+![Homepage](screenshots/home.png)
