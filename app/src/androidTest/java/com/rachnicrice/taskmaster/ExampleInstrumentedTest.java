@@ -1,4 +1,4 @@
-package com.example.taskmaster;
+package com.rachnicrice.taskmaster;
 
 import android.content.Context;
 
