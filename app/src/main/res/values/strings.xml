@@ -9,4 +9,7 @@
     <string name="submit">Submit</string>
     <string name="task_details">Task Details</string>
     <string name="name_of_task">Name of Task</string>
+    <string name="your_task_has_been_submitted">Your Task Has Been Submitted!</string>
+    <string name="task_one">Task One</string>
+    <string name="explain_task_one">Explain task one</string>
 </resources>
