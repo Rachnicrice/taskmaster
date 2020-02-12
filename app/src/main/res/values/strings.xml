@@ -12,4 +12,16 @@
     <string name="your_task_has_been_submitted">Your Task Has Been Submitted!</string>
     <string name="task_one">Task One</string>
     <string name="explain_task_one">Explain task one</string>
+    <string name="settings">settings</string>
+    <string name="make_dinner">Make Dinner</string>
+    <string name="get_gas">Get Gas</string>
+    <string name="feed_the_dog">Feed the Dog</string>
+    <string name="save_settings">Save Settings</string>
+    <string name="name">Name</string>
+    <string name="user_settings">User Settings</string>
+    <string name="username">Username</string>
+    <string name="lorem_ipsum">Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt ut labore et dolore magnam aliquam quaerat voluptatem. Ut enim ad minima veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam, nisi ut aliquid ex ea commodi consequatur? Quis autem vel eum iure reprehenderit qui in ea voluptate velit esse quam nihil molestiae consequatur, vel illum qui dolorem eum fugiat quo voluptas nulla pariatur?</string>
+    <string name="task_title">Task Title</string>
+    <string name="your_settings_have_been_saved">Your Settings Have Been Saved!</string>
+    <string name="enter_name">Enter Name</string>
 </resources>
