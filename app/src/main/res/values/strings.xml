@@ -12,4 +12,8 @@
     <string name="your_task_has_been_submitted">Your Task Has Been Submitted!</string>
     <string name="task_one">Task One</string>
     <string name="explain_task_one">Explain task one</string>
+    <string name="settings">settings</string>
+    <string name="make_dinner">Make Dinner</string>
+    <string name="get_gas">Get Gas</string>
+    <string name="feed_the_dog">Feed the Dog</string>
 </resources>
