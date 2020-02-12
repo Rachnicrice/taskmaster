@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 
 public class MainActivity extends AppCompatActivity {
@@ -25,9 +26,9 @@ public class MainActivity extends AppCompatActivity {
 
         View set = findViewById(R.id.settings);
 
-        View t1 = findViewById(R.id.task1);
-        View t2 = findViewById(R.id.task2);
-        View t3 = findViewById(R.id.task3);
+        Button t1 = findViewById(R.id.task1);
+        Button t2 = findViewById(R.id.task2);
+        Button t3 = findViewById(R.id.task3);
 
         //Set up the event listeners
         b1.setOnClickListener((v) -> {
@@ -42,6 +43,27 @@ public class MainActivity extends AppCompatActivity {
 
         set.setOnClickListener( (v) -> {
             Intent i = new Intent(this, Settings.class);
+            startActivity(i);
+        });
+
+        t1.setOnClickListener((v) -> {
+            Intent i = new Intent(this, TaskDetail.class);
+            String taskTitle = t1.getText().toString();
+            i.putExtra("title", taskTitle);
+            startActivity(i);
+        });
+
+        t2.setOnClickListener((v) -> {
+            Intent i = new Intent(this, TaskDetail.class);
+            String taskTitle = t2.getText().toString();
+            i.putExtra("title", taskTitle);
+            startActivity(i);
+        });
+
+        t3.setOnClickListener((v) -> {
+            Intent i = new Intent(this, TaskDetail.class);
+            String taskTitle = t3.getText().toString();
+            i.putExtra("title", taskTitle);
             startActivity(i);
         });
     }
