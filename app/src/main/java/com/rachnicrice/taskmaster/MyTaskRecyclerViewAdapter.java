@@ -2,6 +2,9 @@ package com.rachnicrice.taskmaster;
 
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Context;
+import android.content.Intent;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,6 +20,7 @@ import java.util.List;
  */
 public class MyTaskRecyclerViewAdapter extends RecyclerView.Adapter<MyTaskRecyclerViewAdapter.ViewHolder> {
 
+    private static final String TAG = "rnr";
     private final List<Task> mValues;
     private final OnListFragmentInteractionListener mListener;
 
@@ -29,6 +33,7 @@ public class MyTaskRecyclerViewAdapter extends RecyclerView.Adapter<MyTaskRecycl
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.fragment_task, parent, false);
+
         return new ViewHolder(view);
     }
 
@@ -38,15 +43,11 @@ public class MyTaskRecyclerViewAdapter extends RecyclerView.Adapter<MyTaskRecycl
         holder.mIdView.setText(mValues.get(position).title);
         holder.mContentView.setText(mValues.get(position).details);
 
-        holder.mView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (null != mListener) {
-                    // Notify the active callbacks interface (the activity, if the
-                    // fragment is attached to one) that an item has been selected.
-                    mListener.onListFragmentInteraction(holder.mItem);
-                }
-            }
+        holder.mView.setOnClickListener((v) -> {
+            Context context = v.getContext();
+            Intent i = new Intent(context, TaskDetail.class);
+            i.putExtra("title", mValues.get(position).title);
+            context.startActivity(i);
         });
     }
 
