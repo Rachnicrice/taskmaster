@@ -69,7 +69,13 @@ public class TaskFragment extends Fragment {
             }
 
             this.taskList = new LinkedList<>();
-            taskList.add(new Task("Make Dinner", "Go to the store and get chicken"));
+            taskList.add(new Task("Make Dinner", "Go to the store and get chicken."));
+            taskList.add(new Task("Get Gas", "Stop at the Shell on the way home."));
+            taskList.add(new Task("Pass 401", "Get your sh$t together."));
+            taskList.add(new Task("Get a job", "Get your sh$t together."));
+            taskList.add(new Task("Find a place to live", "Get a job and get your sh$t together."));
+            taskList.add(new Task("Eat Lumpia", "The lumpia will save you"));
+
 
             recyclerView.setAdapter(new MyTaskRecyclerViewAdapter(taskList, mListener));
         }
@@ -83,8 +89,8 @@ public class TaskFragment extends Fragment {
         if (context instanceof OnListFragmentInteractionListener) {
             mListener = (OnListFragmentInteractionListener) context;
         } else {
-            throw new RuntimeException(context.toString()
-                    + " must implement OnListFragmentInteractionListener");
+//            throw new RuntimeException(context.toString()
+//                    + " must implement OnListFragmentInteractionListener");
         }
     }
 

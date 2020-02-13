@@ -22,4 +22,16 @@ public class Task {
     public void setState(String state) {
         this.state = state;
     }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public String getDetails() {
+        return details;
+    }
+
+    public String getState() {
+        return state;
+    }
 }
