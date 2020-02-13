@@ -13,3 +13,8 @@ Updated the home page to inculde a settings button and buttons for individual ta
 
 ![Homepage](screenshots/home2.png)
 ![Task Detail](screenshots/detail.png)
+
+### Updated the app on 02-13-2020
+Updated the home page to use a fragment which implements a recycler view. When tasks on the homepage are clicked the adaptor now handles the work of passing on the intent and information to the task detail activity.
+
+![Homepage](screenshots/taskmaster.png)
