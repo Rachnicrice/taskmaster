@@ -18,3 +18,9 @@ Updated the home page to inculde a settings button and buttons for individual ta
 Updated the home page to use a fragment which implements a recycler view. When tasks on the homepage are clicked the adaptor now handles the work of passing on the intent and information to the task detail activity.
 
 ![Homepage](screenshots/taskmaster.png)
+
+### Updated the app on 02-19-2020
+Updated the home page to display tasks from the database. Added room to the app and created DAO and database, implemented @Entity on the Task. Users can now add a task and it will be saved to the database. (Though tasks are only displaying on app restart?).
+
+![Homepage](screenshots/room1.png)
+![Task Detail](screenshots/room2.png)
