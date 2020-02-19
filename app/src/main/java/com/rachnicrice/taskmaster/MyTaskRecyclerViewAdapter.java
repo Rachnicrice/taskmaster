@@ -16,16 +16,20 @@ import java.util.List;
 public class MyTaskRecyclerViewAdapter extends RecyclerView.Adapter<MyTaskRecyclerViewAdapter.ViewHolder> {
 
     private static final String TAG = "rnr";
-    private final List<Task> mValues;
+    private List<Task> mValues;
     private final OnTaskClickedListener mListener;
 
     public static interface OnTaskClickedListener {
-        public void taskClicked(Task t);
+        void taskClicked(Task t);
     }
 
     public MyTaskRecyclerViewAdapter(List<Task> items, OnTaskClickedListener listener) {
         mValues = items;
         mListener = listener;
+    }
+
+    public void setTaskList (List<Task> taskList) {
+        this.mValues = taskList;
     }
 
     @Override
