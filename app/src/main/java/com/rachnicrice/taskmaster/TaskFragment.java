@@ -29,7 +29,8 @@ public class TaskFragment extends Fragment {
     private static final String ARG_COLUMN_COUNT = "column-count";
     private int mColumnCount = 1;
     private MyTaskRecyclerViewAdapter.OnTaskClickedListener mListener;
-    private List<Task> taskList;
+    private RecyclerView recyclerView;
+    private MyTaskRecyclerViewAdapter adaptor;
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
@@ -63,13 +64,12 @@ public class TaskFragment extends Fragment {
         // Set the adapter
         if (view instanceof RecyclerView) {
             Context context = view.getContext();
-            RecyclerView recyclerView = (RecyclerView) view;
+            recyclerView = (RecyclerView) view;
             if (mColumnCount <= 1) {
                 recyclerView.setLayoutManager(new LinearLayoutManager(context));
             } else {
                 recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
             }
-
 
             TaskDatabase db = Room.databaseBuilder(this.getContext().getApplicationContext(),
                     TaskDatabase.class, "task")
@@ -79,10 +79,27 @@ public class TaskFragment extends Fragment {
 
             List<Task> taskList = dao.getAll();
 
+            adaptor = new MyTaskRecyclerViewAdapter(taskList, mListener);
+            recyclerView.setAdapter(adaptor);
 
-            recyclerView.setAdapter(new MyTaskRecyclerViewAdapter(taskList, mListener));
         }
         return view;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        TaskDatabase db = Room.databaseBuilder(this.getContext().getApplicationContext(),
+                TaskDatabase.class, "task")
+                .allowMainThreadQueries()
+                .build();
+        TaskDao dao = db.taskDao();
+
+        List<Task> taskList = dao.getAll();
+
+        adaptor.setTaskList(taskList);
+        adaptor.notifyDataSetChanged();
     }
 
 

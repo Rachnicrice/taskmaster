@@ -65,14 +65,6 @@ public class MainActivity extends AppCompatActivity implements MyTaskRecyclerVie
             String text = name + "'s Tasks";
             user.setText(text);
         }
-
-        TaskDatabase db = Room.databaseBuilder(getApplicationContext(),
-                TaskDatabase.class, "task")
-                .allowMainThreadQueries()
-                .build();
-        TaskDao dao = db.taskDao();
-
-        List<Task> taskList = dao.getAll();
     }
 
     @Override
