@@ -2,29 +2,28 @@ package com.rachnicrice.taskmaster;
 
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.content.Context;
-import android.content.Intent;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.rachnicrice.taskmaster.TaskFragment.OnListFragmentInteractionListener;
-
 import java.util.List;
 
 /**
  * {@link RecyclerView.Adapter} that can display a Task and makes a call to the
- * specified {@link OnListFragmentInteractionListener}.
+ * specified {@link}.
  */
 public class MyTaskRecyclerViewAdapter extends RecyclerView.Adapter<MyTaskRecyclerViewAdapter.ViewHolder> {
 
     private static final String TAG = "rnr";
     private final List<Task> mValues;
-    private final OnListFragmentInteractionListener mListener;
+    private final OnTaskClickedListener mListener;
 
-    public MyTaskRecyclerViewAdapter(List<Task> items, OnListFragmentInteractionListener listener) {
+    public static interface OnTaskClickedListener {
+        public void taskClicked(Task t);
+    }
+
+    public MyTaskRecyclerViewAdapter(List<Task> items, OnTaskClickedListener listener) {
         mValues = items;
         mListener = listener;
     }
@@ -44,10 +43,8 @@ public class MyTaskRecyclerViewAdapter extends RecyclerView.Adapter<MyTaskRecycl
         holder.mContentView.setText(mValues.get(position).details);
 
         holder.mView.setOnClickListener((v) -> {
-            Context context = v.getContext();
-            Intent i = new Intent(context, TaskDetail.class);
-            i.putExtra("title", mValues.get(position).title);
-            context.startActivity(i);
+
+            mListener.taskClicked(holder.mItem);
         });
     }
 

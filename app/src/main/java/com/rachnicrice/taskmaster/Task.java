@@ -1,9 +1,22 @@
 package com.rachnicrice.taskmaster;
 
+import androidx.room.ColumnInfo;
+import androidx.room.Entity;
+import androidx.room.PrimaryKey;
+
+@Entity
 public class Task {
     //instance variables
+    @PrimaryKey
+    public Long id;
+
+    @ColumnInfo
     public final String title;
+
+    @ColumnInfo
     public final String details;
+
+    @ColumnInfo
     public String state;
 
     //constructor function

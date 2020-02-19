@@ -7,26 +7,28 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.room.Room;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import java.util.LinkedList;
+import com.rachnicrice.taskmaster.Room.TaskDao;
+import com.rachnicrice.taskmaster.Room.TaskDatabase;
+
 import java.util.List;
 
 
 /**
  * A fragment representing a list of Items.
  * <p/>
- * Activities containing this fragment MUST implement the {@link OnListFragmentInteractionListener}
  * interface.
  */
 public class TaskFragment extends Fragment {
 
     private static final String ARG_COLUMN_COUNT = "column-count";
     private int mColumnCount = 1;
-    private OnListFragmentInteractionListener mListener;
+    private MyTaskRecyclerViewAdapter.OnTaskClickedListener mListener;
     private List<Task> taskList;
 
     /**
@@ -68,13 +70,14 @@ public class TaskFragment extends Fragment {
                 recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
             }
 
-            this.taskList = new LinkedList<>();
-            taskList.add(new Task("Make Dinner", "Go to the store and get chicken."));
-            taskList.add(new Task("Get Gas", "Stop at the Shell on the way home."));
-            taskList.add(new Task("Pass 401", "Get your sh$t together."));
-            taskList.add(new Task("Get a job", "Get your sh$t together."));
-            taskList.add(new Task("Find a place to live", "Get a job and get your sh$t together."));
-            taskList.add(new Task("Eat Lumpia", "The lumpia will save you"));
+
+            TaskDatabase db = Room.databaseBuilder(this.getContext().getApplicationContext(),
+                    TaskDatabase.class, "task")
+                    .allowMainThreadQueries()
+                    .build();
+            TaskDao dao = db.taskDao();
+
+            List<Task> taskList = dao.getAll();
 
 
             recyclerView.setAdapter(new MyTaskRecyclerViewAdapter(taskList, mListener));
@@ -86,8 +89,8 @@ public class TaskFragment extends Fragment {
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        if (context instanceof OnListFragmentInteractionListener) {
-            mListener = (OnListFragmentInteractionListener) context;
+        if (context instanceof MyTaskRecyclerViewAdapter.OnTaskClickedListener) {
+            mListener = (MyTaskRecyclerViewAdapter.OnTaskClickedListener) context;
         } else {
 //            throw new RuntimeException(context.toString()
 //                    + " must implement OnListFragmentInteractionListener");
@@ -110,7 +113,4 @@ public class TaskFragment extends Fragment {
      * "http://developer.android.com/training/basics/fragments/communicating.html"
      * >Communicating with Other Fragments</a> for more information.
      */
-    public interface OnListFragmentInteractionListener {
-        void onListFragmentInteraction(Task item);
-    }
 }
