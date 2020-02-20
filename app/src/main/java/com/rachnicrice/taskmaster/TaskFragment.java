@@ -9,14 +9,27 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.room.Room;
 
+import android.os.Handler;
+import android.os.Looper;
+import android.os.Message;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.amazonaws.amplify.generated.graphql.ListTasksQuery;
+import com.amazonaws.mobile.config.AWSConfiguration;
+import com.amazonaws.mobileconnectors.appsync.AWSAppSyncClient;
+import com.amazonaws.mobileconnectors.appsync.fetcher.AppSyncResponseFetchers;
+import com.apollographql.apollo.GraphQLCall;
+import com.apollographql.apollo.api.Response;
+import com.apollographql.apollo.exception.ApolloException;
 import com.rachnicrice.taskmaster.Room.TaskDao;
 import com.rachnicrice.taskmaster.Room.TaskDatabase;
 
 import java.util.List;
+
+import javax.annotation.Nonnull;
 
 
 /**
@@ -31,6 +44,7 @@ public class TaskFragment extends Fragment {
     private MyTaskRecyclerViewAdapter.OnTaskClickedListener mListener;
     private RecyclerView recyclerView;
     private MyTaskRecyclerViewAdapter adaptor;
+    private AWSAppSyncClient mAWSAppSyncClient;
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
@@ -71,16 +85,10 @@ public class TaskFragment extends Fragment {
                 recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
             }
 
-            TaskDatabase db = Room.databaseBuilder(this.getContext().getApplicationContext(),
-                    TaskDatabase.class, "task")
-                    .allowMainThreadQueries()
+            mAWSAppSyncClient = AWSAppSyncClient.builder()
+                    .context(view.getContext().getApplicationContext())
+                    .awsConfiguration(new AWSConfiguration(view.getContext().getApplicationContext()))
                     .build();
-            TaskDao dao = db.taskDao();
-
-            List<Task> taskList = dao.getAll();
-
-            adaptor = new MyTaskRecyclerViewAdapter(taskList, mListener);
-            recyclerView.setAdapter(adaptor);
 
         }
         return view;
@@ -90,27 +98,38 @@ public class TaskFragment extends Fragment {
     public void onResume() {
         super.onResume();
 
-        TaskDatabase db = Room.databaseBuilder(this.getContext().getApplicationContext(),
-                TaskDatabase.class, "task")
-                .allowMainThreadQueries()
-                .build();
-        TaskDao dao = db.taskDao();
+        mAWSAppSyncClient.query(ListTasksQuery.builder().build())
+                .responseFetcher(AppSyncResponseFetchers.NETWORK_FIRST)
+                .enqueue(new GraphQLCall.Callback<ListTasksQuery.Data>() {
+                    @Override
+                    public void onResponse(@Nonnull Response<ListTasksQuery.Data> response) {
 
-        List<Task> taskList = dao.getAll();
+                        Handler h = new Handler(Looper.getMainLooper()){
+                            @Override
+                            public void handleMessage(Message inputMessage) {
+                                recyclerView.setAdapter(new MyTaskRecyclerViewAdapter(response.data().listTasks().items(), mListener));
+                            }
+                        };
+                        h.obtainMessage().sendToTarget();
+                    }
 
-        adaptor.setTaskList(taskList);
-        adaptor.notifyDataSetChanged();
+                    @Override
+                    public void onFailure(@Nonnull ApolloException e) {
+
+                    }
+                });
     }
 
 
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
+        Log.i("mnf", "attaching");
         if (context instanceof MyTaskRecyclerViewAdapter.OnTaskClickedListener) {
+            Log.i("mnf", "saving");
             mListener = (MyTaskRecyclerViewAdapter.OnTaskClickedListener) context;
         } else {
-//            throw new RuntimeException(context.toString()
-//                    + " must implement OnListFragmentInteractionListener");
+            Log.w("mnf", "it's not in an OnTaskClickedListener!");
         }
     }
 

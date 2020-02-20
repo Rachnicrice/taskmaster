@@ -1,4 +1,5 @@
 apply plugin: 'com.android.application'
+apply plugin: 'com.amazonaws.appsync'
 
 android {
     compileSdkVersion 29
@@ -14,6 +15,10 @@ android {
             annotationProcessorOptions {
                 arguments = ["room.schemaLocation": "$projectDir/schemas".toString()]
             }
+        }
+        compileOptions {
+            sourceCompatibility 1.8
+            targetCompatibility 1.8
         }
 
     }
@@ -41,6 +46,14 @@ dependencies {
     implementation 'com.google.android.material:material:1.1.0'
     def room_version = "2.2.3"
 
+    //Room dependencies
     implementation "androidx.room:room-runtime:$room_version"
     annotationProcessor "androidx.room:room-compiler:$room_version"
+
+    //Amplify dependencies
+    implementation 'com.amazonaws:aws-android-sdk-core:2.15.+'
+    //AppSync SDK
+    implementation 'com.amazonaws:aws-android-sdk-appsync:2.8.+'
+    implementation 'org.eclipse.paho:org.eclipse.paho.client.mqttv3:1.2.0'
+    implementation 'org.eclipse.paho:org.eclipse.paho.android.service:1.1.1'
 }

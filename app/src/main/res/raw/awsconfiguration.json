@@ -1,0 +1,16 @@
+{
+    "UserAgent": "aws-amplify-cli/0.1.0",
+    "Version": "0.1.0",
+    "IdentityManager": {
+        "Default": {}
+    },
+    "AppSync": {
+        "Default": {
+            "ApiUrl": "https://lm3p7jmxo5hcdfjactzepm4uwq.appsync-api.us-west-2.amazonaws.com/graphql",
+            "Region": "us-west-2",
+            "AuthMode": "API_KEY",
+            "ApiKey": "da2-afl2ft4jqzh2vfrhfl4jlx4nki",
+            "ClientDatabasePrefix": "amplifyDatasource_API_KEY"
+        }
+    }
+}
