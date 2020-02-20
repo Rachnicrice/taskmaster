@@ -12,6 +12,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
+import com.amazonaws.amplify.generated.graphql.ListTasksQuery;
 import com.rachnicrice.taskmaster.Room.TaskDao;
 import com.rachnicrice.taskmaster.Room.TaskDatabase;
 
@@ -48,6 +49,8 @@ public class MainActivity extends AppCompatActivity implements MyTaskRecyclerVie
             startActivity(i);
         });
 
+
+
     }
 
     @Override
@@ -68,11 +71,11 @@ public class MainActivity extends AppCompatActivity implements MyTaskRecyclerVie
     }
 
     @Override
-    public void taskClicked(Task t) {
+    public void taskClicked(ListTasksQuery.Item t) {
         Intent i = new Intent(this, TaskDetail.class);
-        i.putExtra("title", t.title);
-        i.putExtra("details", t.details);
-        i.putExtra("state", t.state);
+        i.putExtra("title", t.title());
+        i.putExtra("details", t.details());
+        i.putExtra("state", t.state());
         startActivity(i);
 
     }

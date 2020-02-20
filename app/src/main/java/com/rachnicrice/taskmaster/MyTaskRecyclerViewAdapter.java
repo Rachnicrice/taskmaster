@@ -7,6 +7,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.amazonaws.amplify.generated.graphql.ListTasksQuery;
+
 import java.util.List;
 
 /**
@@ -16,19 +18,19 @@ import java.util.List;
 public class MyTaskRecyclerViewAdapter extends RecyclerView.Adapter<MyTaskRecyclerViewAdapter.ViewHolder> {
 
     private static final String TAG = "rnr";
-    private List<Task> mValues;
+    private List<ListTasksQuery.Item> mValues;
     private final OnTaskClickedListener mListener;
 
     public static interface OnTaskClickedListener {
-        void taskClicked(Task t);
+        void taskClicked(ListTasksQuery.Item i);
     }
 
-    public MyTaskRecyclerViewAdapter(List<Task> items, OnTaskClickedListener listener) {
+    public MyTaskRecyclerViewAdapter(List<ListTasksQuery.Item> items, OnTaskClickedListener listener) {
         mValues = items;
         mListener = listener;
     }
 
-    public void setTaskList (List<Task> taskList) {
+    public void setTaskList (List<ListTasksQuery.Item> taskList) {
         this.mValues = taskList;
     }
 
@@ -43,8 +45,8 @@ public class MyTaskRecyclerViewAdapter extends RecyclerView.Adapter<MyTaskRecycl
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
         holder.mItem = mValues.get(position);
-        holder.mIdView.setText(mValues.get(position).title);
-        holder.mContentView.setText(mValues.get(position).details);
+        holder.mIdView.setText(mValues.get(position).title());
+        holder.mContentView.setText(mValues.get(position).details());
 
         holder.mView.setOnClickListener((v) -> {
 
@@ -61,7 +63,7 @@ public class MyTaskRecyclerViewAdapter extends RecyclerView.Adapter<MyTaskRecycl
         public final View mView;
         public final TextView mIdView;
         public final TextView mContentView;
-        public Task mItem;
+        public ListTasksQuery.Item mItem;
 
         public ViewHolder(View view) {
             super(view);
