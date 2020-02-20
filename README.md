@@ -24,3 +24,9 @@ Updated the home page to display tasks from the database. Added room to the app 
 
 ![Homepage](screenshots/room1.png)
 ![Task Detail](screenshots/room2.png)
+
+### Updated the app on 02-20-2020
+Updated the app to connect to an AWS database using Amplify. Add task will now add to the DynamoDB database. Tasks rendered on the front page are all pulled from the Amplify database.
+
+![Homepage](screenshots/amplify.png)
+
