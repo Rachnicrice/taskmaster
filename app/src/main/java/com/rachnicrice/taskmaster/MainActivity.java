@@ -12,6 +12,7 @@ import android.widget.TextView;
 
 import com.amazonaws.amplify.generated.graphql.CreateTeamMutation;
 import com.amazonaws.amplify.generated.graphql.ListTasksQuery;
+import com.amazonaws.mobile.config.AWSConfiguration;
 import com.amazonaws.mobileconnectors.appsync.AWSAppSyncClient;
 import com.apollographql.apollo.GraphQLCall;
 import com.apollographql.apollo.api.Response;
@@ -56,7 +57,12 @@ public class MainActivity extends AppCompatActivity implements MyTaskRecyclerVie
 
 
         CreateTeamInput teamInput = CreateTeamInput.builder()
-                .team("Team A")
+                .team("Team C")
+                .build();
+
+        mAWSAppSyncClient = AWSAppSyncClient.builder()
+                .context(getApplicationContext())
+                .awsConfiguration(new AWSConfiguration(getApplicationContext()))
                 .build();
 
         mAWSAppSyncClient.mutate(CreateTeamMutation.builder().input(teamInput).build()).enqueue(
@@ -71,8 +77,6 @@ public class MainActivity extends AppCompatActivity implements MyTaskRecyclerVie
                         Log.w(TAG, "failure");
                     }
                 });
-
-
     }
 
     @Override
