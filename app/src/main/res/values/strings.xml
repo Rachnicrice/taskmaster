@@ -24,4 +24,7 @@
     <string name="task_title">Task Title</string>
     <string name="your_settings_have_been_saved">Your Settings Have Been Saved!</string>
     <string name="enter_name">Enter Name</string>
+    <string name="team_a">Team A</string>
+    <string name="team_b">Team B</string>
+    <string name="team_c">Team C</string>
 </resources>

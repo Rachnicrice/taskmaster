@@ -111,4 +111,39 @@
         app:layout_constraintTop_toBottomOf="@+id/textView3"
         tools:visibility="visible" />
 
+    <RadioGroup
+        android:id="@+id/addGroup"
+        android:layout_width="130dp"
+        android:layout_height="104dp"
+        app:layout_constraintBottom_toTopOf="@+id/submit"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/editText">
+
+        <RadioButton
+            android:id="@+id/buttonA"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/team_a" />
+
+        <RadioButton
+            android:id="@+id/buttonB"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/team_b" />
+
+        <RadioGroup
+            android:layout_width="match_parent"
+            android:layout_height="36dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent">
+
+            <RadioButton
+                android:id="@+id/buttonC"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/team_c" />
+        </RadioGroup>
+    </RadioGroup>
+
 </androidx.constraintlayout.widget.ConstraintLayout>

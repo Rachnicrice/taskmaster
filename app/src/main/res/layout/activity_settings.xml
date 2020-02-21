@@ -64,4 +64,33 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView"
         tools:visibility="visible" />
+
+    <RadioGroup
+        android:id="@+id/setGroup"
+        android:layout_width="135dp"
+        android:layout_height="97dp"
+        app:layout_constraintBottom_toTopOf="@+id/save"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/username">
+
+        <RadioButton
+            android:id="@+id/teamA"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:checked="true"
+            android:text="@string/team_a" />
+
+        <RadioButton
+            android:id="@+id/teamB"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/team_b" />
+
+        <RadioButton
+            android:id="@+id/teamC"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/team_c" />
+    </RadioGroup>
 </androidx.constraintlayout.widget.ConstraintLayout>

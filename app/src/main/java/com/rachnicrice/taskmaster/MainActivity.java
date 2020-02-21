@@ -1,9 +1,7 @@
 package com.rachnicrice.taskmaster;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.room.Room;
 
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -12,15 +10,22 @@ import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
+import com.amazonaws.amplify.generated.graphql.CreateTeamMutation;
 import com.amazonaws.amplify.generated.graphql.ListTasksQuery;
-import com.rachnicrice.taskmaster.Room.TaskDao;
-import com.rachnicrice.taskmaster.Room.TaskDatabase;
+import com.amazonaws.mobileconnectors.appsync.AWSAppSyncClient;
+import com.apollographql.apollo.GraphQLCall;
+import com.apollographql.apollo.api.Response;
+import com.apollographql.apollo.exception.ApolloException;
 
-import java.util.List;
+import javax.annotation.Nonnull;
+
+import type.CreateTeamInput;
+
 
 public class MainActivity extends AppCompatActivity implements MyTaskRecyclerViewAdapter.OnTaskClickedListener {
 
     private static final String TAG = "Rachael";
+    private AWSAppSyncClient mAWSAppSyncClient;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,6 +54,23 @@ public class MainActivity extends AppCompatActivity implements MyTaskRecyclerVie
             startActivity(i);
         });
 
+
+        CreateTeamInput teamInput = CreateTeamInput.builder()
+                .team("Team A")
+                .build();
+
+        mAWSAppSyncClient.mutate(CreateTeamMutation.builder().input(teamInput).build()).enqueue(
+                new GraphQLCall.Callback<CreateTeamMutation.Data>() {
+                    @Override
+                    public void onResponse(@Nonnull Response<CreateTeamMutation.Data> response) {
+                        Log.i(TAG, response.data().toString());
+                    }
+
+                    @Override
+                    public void onFailure(@Nonnull ApolloException e) {
+                        Log.w(TAG, "failure");
+                    }
+                });
 
 
     }

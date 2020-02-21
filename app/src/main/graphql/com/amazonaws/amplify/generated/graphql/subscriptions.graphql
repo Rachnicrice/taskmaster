@@ -5,6 +5,17 @@ subscription OnCreateTask {
     title
     details
     state
+    team {
+      id
+      team
+      tasks {
+        nextToken
+        startedAt
+      }
+      _version
+      _deleted
+      _lastChangedAt
+    }
     _version
     _deleted
     _lastChangedAt
@@ -16,6 +27,17 @@ subscription OnUpdateTask {
     title
     details
     state
+    team {
+      id
+      team
+      tasks {
+        nextToken
+        startedAt
+      }
+      _version
+      _deleted
+      _lastChangedAt
+    }
     _version
     _deleted
     _lastChangedAt
@@ -27,6 +49,83 @@ subscription OnDeleteTask {
     title
     details
     state
+    team {
+      id
+      team
+      tasks {
+        nextToken
+        startedAt
+      }
+      _version
+      _deleted
+      _lastChangedAt
+    }
+    _version
+    _deleted
+    _lastChangedAt
+  }
+}
+subscription OnCreateTeam {
+  onCreateTeam {
+    id
+    team
+    tasks {
+      items {
+        id
+        title
+        details
+        state
+        _version
+        _deleted
+        _lastChangedAt
+      }
+      nextToken
+      startedAt
+    }
+    _version
+    _deleted
+    _lastChangedAt
+  }
+}
+subscription OnUpdateTeam {
+  onUpdateTeam {
+    id
+    team
+    tasks {
+      items {
+        id
+        title
+        details
+        state
+        _version
+        _deleted
+        _lastChangedAt
+      }
+      nextToken
+      startedAt
+    }
+    _version
+    _deleted
+    _lastChangedAt
+  }
+}
+subscription OnDeleteTeam {
+  onDeleteTeam {
+    id
+    team
+    tasks {
+      items {
+        id
+        title
+        details
+        state
+        _version
+        _deleted
+        _lastChangedAt
+      }
+      nextToken
+      startedAt
+    }
     _version
     _deleted
     _lastChangedAt

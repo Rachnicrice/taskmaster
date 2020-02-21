@@ -3,6 +3,7 @@ package com.rachnicrice.taskmaster;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
+import com.rachnicrice.taskmaster.Team;
 
 @Entity
 public class Task {
@@ -19,11 +20,15 @@ public class Task {
     @ColumnInfo
     public String state;
 
+    @ColumnInfo
+    public Team team;
+
     //constructor function
-    public Task (String title, String details) {
+    public Task (String title, String details, Team team) {
         this.title = title;
         this.details = details;
         this.state = "new";
+        this.team = team;
     }
 
     //instance methods
@@ -46,5 +51,13 @@ public class Task {
 
     public String getState() {
         return state;
+    }
+
+    public Team getTeam() {
+        return team;
+    }
+
+    public void setTeam(Team team) {
+        this.team = team;
     }
 }
