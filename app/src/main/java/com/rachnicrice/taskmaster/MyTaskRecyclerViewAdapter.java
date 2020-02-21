@@ -49,7 +49,6 @@ public class MyTaskRecyclerViewAdapter extends RecyclerView.Adapter<MyTaskRecycl
         holder.mContentView.setText(mValues.get(position).details());
 
         holder.mView.setOnClickListener((v) -> {
-
             mListener.taskClicked(holder.mItem);
         });
     }

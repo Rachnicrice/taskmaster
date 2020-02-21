@@ -3,8 +3,7 @@ package com.rachnicrice.taskmaster;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
-
-import com.rachnicrice.taskmaster.Room.Team;
+import com.rachnicrice.taskmaster.Team;
 
 @Entity
 public class Task {
@@ -52,5 +51,13 @@ public class Task {
 
     public String getState() {
         return state;
+    }
+
+    public Team getTeam() {
+        return team;
+    }
+
+    public void setTeam(Team team) {
+        this.team = team;
     }
 }

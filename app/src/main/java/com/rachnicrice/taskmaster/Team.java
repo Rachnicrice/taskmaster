@@ -1,9 +1,8 @@
-package com.rachnicrice.taskmaster.Room;
+package com.rachnicrice.taskmaster;
 
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
-
 import com.rachnicrice.taskmaster.Task;
 
 import java.util.List;

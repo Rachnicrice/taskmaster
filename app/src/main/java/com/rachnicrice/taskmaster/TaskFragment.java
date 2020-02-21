@@ -7,7 +7,6 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import androidx.room.Room;
 
 import android.os.Handler;
 import android.os.Looper;
@@ -24,10 +23,7 @@ import com.amazonaws.mobileconnectors.appsync.fetcher.AppSyncResponseFetchers;
 import com.apollographql.apollo.GraphQLCall;
 import com.apollographql.apollo.api.Response;
 import com.apollographql.apollo.exception.ApolloException;
-import com.rachnicrice.taskmaster.Room.TaskDao;
-import com.rachnicrice.taskmaster.Room.TaskDatabase;
 
-import java.util.List;
 
 import javax.annotation.Nonnull;
 
@@ -107,7 +103,12 @@ public class TaskFragment extends Fragment {
                         Handler h = new Handler(Looper.getMainLooper()){
                             @Override
                             public void handleMessage(Message inputMessage) {
-                                recyclerView.setAdapter(new MyTaskRecyclerViewAdapter(response.data().listTasks().items(), mListener));
+                                if (adaptor == null) {
+                                    adaptor = new MyTaskRecyclerViewAdapter(response.data().listTasks().items(), mListener);
+                                    recyclerView.setAdapter(adaptor);
+                                }
+                                adaptor.setTaskList(response.data().listTasks().items());
+                                adaptor.notifyDataSetChanged();
                             }
                         };
                         h.obtainMessage().sendToTarget();

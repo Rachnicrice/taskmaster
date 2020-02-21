@@ -66,6 +66,7 @@
         tools:visibility="visible" />
 
     <RadioGroup
+        android:id="@+id/setGroup"
         android:layout_width="135dp"
         android:layout_height="97dp"
         app:layout_constraintBottom_toTopOf="@+id/save"
