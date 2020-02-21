@@ -50,6 +50,8 @@ public class AddTask extends AppCompatActivity {
             String title = taskTitle.getText().toString();
             String details = taskDetails.getText().toString();
 
+
+
             CreateTaskInput input = CreateTaskInput.builder()
                     .title(title)
                     .details(details)
