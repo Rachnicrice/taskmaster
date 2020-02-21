@@ -4,6 +4,8 @@ import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
+import com.rachnicrice.taskmaster.Room.Team;
+
 @Entity
 public class Task {
     //instance variables
@@ -19,11 +21,15 @@ public class Task {
     @ColumnInfo
     public String state;
 
+    @ColumnInfo
+    public Team team;
+
     //constructor function
-    public Task (String title, String details) {
+    public Task (String title, String details, Team team) {
         this.title = title;
         this.details = details;
         this.state = "new";
+        this.team = team;
     }
 
     //instance methods
