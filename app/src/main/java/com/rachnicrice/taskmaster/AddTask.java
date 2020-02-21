@@ -56,26 +56,26 @@ public class AddTask extends AppCompatActivity {
             RadioButton selected = group.findViewById(radioId);
             String team = selected.getText().toString();
 
-//
-//            CreateTaskInput input = CreateTaskInput.builder()
-//                    .title(title)
-//                    .details(details)
-//                    .state("new")
-//                    .taskTeamId(team)
-//                    .build();
-//
-//            mAWSAppSyncClient.mutate(CreateTaskMutation.builder().input(input).build()).enqueue(
-//                    new GraphQLCall.Callback<CreateTaskMutation.Data>() {
-//                        @Override
-//                        public void onResponse(@Nonnull Response<CreateTaskMutation.Data> response) {
-//                            Log.i(TAG, response.data().toString());
-//                        }
-//
-//                        @Override
-//                        public void onFailure(@Nonnull ApolloException e) {
-//                            Log.w(TAG, "failure");
-//                        }
-//                    });
+
+            CreateTaskInput input = CreateTaskInput.builder()
+                    .title(title)
+                    .details(details)
+                    .state("new")
+                    .taskTeamId(team)
+                    .build();
+
+            mAWSAppSyncClient.mutate(CreateTaskMutation.builder().input(input).build()).enqueue(
+                    new GraphQLCall.Callback<CreateTaskMutation.Data>() {
+                        @Override
+                        public void onResponse(@Nonnull Response<CreateTaskMutation.Data> response) {
+                            Log.i(TAG, response.data().toString());
+                        }
+
+                        @Override
+                        public void onFailure(@Nonnull ApolloException e) {
+                            Log.w(TAG, "failure");
+                        }
+                    });
         });
     }
 }
