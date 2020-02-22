@@ -55,28 +55,6 @@ public class MainActivity extends AppCompatActivity implements MyTaskRecyclerVie
             startActivity(i);
         });
 
-
-        CreateTeamInput teamInput = CreateTeamInput.builder()
-                .team("Team C")
-                .build();
-
-        mAWSAppSyncClient = AWSAppSyncClient.builder()
-                .context(getApplicationContext())
-                .awsConfiguration(new AWSConfiguration(getApplicationContext()))
-                .build();
-
-        mAWSAppSyncClient.mutate(CreateTeamMutation.builder().input(teamInput).build()).enqueue(
-                new GraphQLCall.Callback<CreateTeamMutation.Data>() {
-                    @Override
-                    public void onResponse(@Nonnull Response<CreateTeamMutation.Data> response) {
-                        Log.i(TAG, response.data().toString());
-                    }
-
-                    @Override
-                    public void onFailure(@Nonnull ApolloException e) {
-                        Log.w(TAG, "failure");
-                    }
-                });
     }
 
     @Override
