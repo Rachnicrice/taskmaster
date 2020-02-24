@@ -100,7 +100,7 @@ public class TaskFragment extends Fragment {
                 .enqueue(new GraphQLCall.Callback<ListTeamsQuery.Data>() {
                     @Override
                     public void onResponse(@Nonnull Response<ListTeamsQuery.Data> response) {
-                        Log.i("rnr", response.toString());
+                        Log.i("rnr.team", response.toString());
                     }
 
                     @Override
