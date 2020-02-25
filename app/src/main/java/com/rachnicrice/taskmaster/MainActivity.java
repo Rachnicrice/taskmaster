@@ -61,8 +61,43 @@ public class MainActivity extends AppCompatActivity implements MyTaskRecyclerVie
             startActivity(i);
         });
 
+        View logout = findViewById(R.id.logout);
+        logout.setOnClickListener((v) -> {
+            String username = AWSMobileClient.getInstance().getUsername();
+            AWSMobileClient.getInstance().signOut();
 
+            AWSMobileClient.getInstance().initialize(getApplicationContext(), new Callback<UserStateDetails>() {
 
+                        @Override
+                        public void onResult(UserStateDetails userStateDetails) {
+                            Log.i("INIT", "onResult: " + userStateDetails.getUserState());
+                            if (userStateDetails.getUserState().equals(UserState.SIGNED_OUT)) {
+                                AWSMobileClient.getInstance().showSignIn(MainActivity.this, new Callback<UserStateDetails>() {
+
+                                    @Override
+                                    public void onResult(UserStateDetails result) {
+                                        Log.d(TAG, "onResult: " + result.getUserState());
+
+                                    }
+
+                                    @Override
+                                    public void onError(Exception e) {
+                                        Log.e(TAG, "onError: ", e);
+                                    }
+                                });
+                            }
+                        }
+
+                        @Override
+                        public void onError(Exception e) {
+                            Log.e("INIT", "Initialization error.", e);
+                        }
+                    }
+            );
+
+        });
+
+        //TODO Put this code into a method
         AWSMobileClient.getInstance().initialize(getApplicationContext(), new Callback<UserStateDetails>() {
 
                     @Override
@@ -74,23 +109,6 @@ public class MainActivity extends AppCompatActivity implements MyTaskRecyclerVie
                                 @Override
                                 public void onResult(UserStateDetails result) {
                                     Log.d(TAG, "onResult: " + result.getUserState());
-
-                                    View logout = findViewById(R.id.logout);
-
-                                    logout.setOnClickListener( (v) -> {
-
-                                        AWSMobileClient.getInstance().signOut(SignOutOptions.builder().signOutGlobally(true).build(), new Callback<Void>() {
-                                            @Override
-                                            public void onResult(final Void result) {
-                                                Log.d(TAG, "signed-out");
-                                            }
-
-                                            @Override
-                                            public void onError(Exception e) {
-                                                Log.e(TAG, "sign-out error", e);
-                                            }
-                                        });
-                                    });
 
                                 }
 
@@ -117,15 +135,18 @@ public class MainActivity extends AppCompatActivity implements MyTaskRecyclerVie
         Log.i(TAG, "We are in onResume yay!");
 
         //Check to see if there is a user saved in Shared Preferences
-        SharedPreferences p = PreferenceManager.getDefaultSharedPreferences(this);
-        String name = p.getString("user", "def");
-        Log.i(TAG, name);
+//        SharedPreferences p = PreferenceManager.getDefaultSharedPreferences(this);
+//        String name = p.getString("user", "def");
+//        Log.i(TAG, name);
         TextView user = findViewById(R.id.userTasks);
 
-        if (!name.equals("def")) {
-            String text = name + "'s Tasks";
-            user.setText(text);
-        }
+//        if (!name.equals("def")) {
+//            String text = name + "'s Tasks";
+//            user.setText(text);
+//        }
+
+        String username = AWSMobileClient.getInstance().getUsername();
+        user.setText(username + "'s Tasks");
     }
 
     @Override
