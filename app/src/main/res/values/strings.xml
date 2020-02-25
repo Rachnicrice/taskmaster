@@ -27,4 +27,5 @@
     <string name="team_a">Team A</string>
     <string name="team_b">Team B</string>
     <string name="team_c">Team C</string>
+    <string name="log_out">Log Out</string>
 </resources>

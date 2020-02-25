@@ -14,6 +14,7 @@ import com.amazonaws.amplify.generated.graphql.CreateTeamMutation;
 import com.amazonaws.amplify.generated.graphql.ListTasksQuery;
 import com.amazonaws.mobile.client.AWSMobileClient;
 import com.amazonaws.mobile.client.Callback;
+import com.amazonaws.mobile.client.SignOutOptions;
 import com.amazonaws.mobile.client.UserState;
 import com.amazonaws.mobile.client.UserStateDetails;
 import com.amazonaws.mobile.config.AWSConfiguration;
@@ -41,6 +42,7 @@ public class MainActivity extends AppCompatActivity implements MyTaskRecyclerVie
         View b1 = findViewById(R.id.button1);
         View b2 = findViewById(R.id.button2);
 
+
         View set = findViewById(R.id.settings);
 
         //Set up the event listeners
@@ -59,6 +61,8 @@ public class MainActivity extends AppCompatActivity implements MyTaskRecyclerVie
             startActivity(i);
         });
 
+
+
         AWSMobileClient.getInstance().initialize(getApplicationContext(), new Callback<UserStateDetails>() {
 
                     @Override
@@ -66,10 +70,27 @@ public class MainActivity extends AppCompatActivity implements MyTaskRecyclerVie
                         Log.i("INIT", "onResult: " + userStateDetails.getUserState());
                         if (userStateDetails.getUserState().equals(UserState.SIGNED_OUT)) {
                             AWSMobileClient.getInstance().showSignIn(MainActivity.this, new Callback<UserStateDetails>() {
-                                
+
                                 @Override
                                 public void onResult(UserStateDetails result) {
                                     Log.d(TAG, "onResult: " + result.getUserState());
+
+                                    View logout = findViewById(R.id.logout);
+
+                                    logout.setOnClickListener( (v) -> {
+
+                                        AWSMobileClient.getInstance().signOut(SignOutOptions.builder().signOutGlobally(true).build(), new Callback<Void>() {
+                                            @Override
+                                            public void onResult(final Void result) {
+                                                Log.d(TAG, "signed-out");
+                                            }
+
+                                            @Override
+                                            public void onError(Exception e) {
+                                                Log.e(TAG, "sign-out error", e);
+                                            }
+                                        });
+                                    });
 
                                 }
 
