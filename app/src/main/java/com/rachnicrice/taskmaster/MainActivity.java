@@ -12,6 +12,11 @@ import android.widget.TextView;
 
 import com.amazonaws.amplify.generated.graphql.CreateTeamMutation;
 import com.amazonaws.amplify.generated.graphql.ListTasksQuery;
+import com.amazonaws.mobile.client.AWSMobileClient;
+import com.amazonaws.mobile.client.Callback;
+import com.amazonaws.mobile.client.SignOutOptions;
+import com.amazonaws.mobile.client.UserState;
+import com.amazonaws.mobile.client.UserStateDetails;
 import com.amazonaws.mobile.config.AWSConfiguration;
 import com.amazonaws.mobileconnectors.appsync.AWSAppSyncClient;
 import com.apollographql.apollo.GraphQLCall;
@@ -37,6 +42,7 @@ public class MainActivity extends AppCompatActivity implements MyTaskRecyclerVie
         View b1 = findViewById(R.id.button1);
         View b2 = findViewById(R.id.button2);
 
+
         View set = findViewById(R.id.settings);
 
         //Set up the event listeners
@@ -50,34 +56,78 @@ public class MainActivity extends AppCompatActivity implements MyTaskRecyclerVie
             startActivity(i);
         });
 
-        set.setOnClickListener( (v) -> {
+        set.setOnClickListener((v) -> {
             Intent i = new Intent(this, Settings.class);
             startActivity(i);
         });
 
+        View logout = findViewById(R.id.logout);
+        logout.setOnClickListener((v) -> {
+            String username = AWSMobileClient.getInstance().getUsername();
+            AWSMobileClient.getInstance().signOut();
 
-        CreateTeamInput teamInput = CreateTeamInput.builder()
-                .team("Team C")
-                .build();
+            AWSMobileClient.getInstance().initialize(getApplicationContext(), new Callback<UserStateDetails>() {
 
-        mAWSAppSyncClient = AWSAppSyncClient.builder()
-                .context(getApplicationContext())
-                .awsConfiguration(new AWSConfiguration(getApplicationContext()))
-                .build();
+                        @Override
+                        public void onResult(UserStateDetails userStateDetails) {
+                            Log.i("INIT", "onResult: " + userStateDetails.getUserState());
+                            if (userStateDetails.getUserState().equals(UserState.SIGNED_OUT)) {
+                                AWSMobileClient.getInstance().showSignIn(MainActivity.this, new Callback<UserStateDetails>() {
 
-        mAWSAppSyncClient.mutate(CreateTeamMutation.builder().input(teamInput).build()).enqueue(
-                new GraphQLCall.Callback<CreateTeamMutation.Data>() {
+                                    @Override
+                                    public void onResult(UserStateDetails result) {
+                                        Log.d(TAG, "onResult: " + result.getUserState());
+
+                                    }
+
+                                    @Override
+                                    public void onError(Exception e) {
+                                        Log.e(TAG, "onError: ", e);
+                                    }
+                                });
+                            }
+                        }
+
+                        @Override
+                        public void onError(Exception e) {
+                            Log.e("INIT", "Initialization error.", e);
+                        }
+                    }
+            );
+
+        });
+
+        //TODO Put this code into a method
+        AWSMobileClient.getInstance().initialize(getApplicationContext(), new Callback<UserStateDetails>() {
+
                     @Override
-                    public void onResponse(@Nonnull Response<CreateTeamMutation.Data> response) {
-                        Log.i(TAG, response.data().toString());
+                    public void onResult(UserStateDetails userStateDetails) {
+                        Log.i("INIT", "onResult: " + userStateDetails.getUserState());
+                        if (userStateDetails.getUserState().equals(UserState.SIGNED_OUT)) {
+                            AWSMobileClient.getInstance().showSignIn(MainActivity.this, new Callback<UserStateDetails>() {
+
+                                @Override
+                                public void onResult(UserStateDetails result) {
+                                    Log.d(TAG, "onResult: " + result.getUserState());
+
+                                }
+
+                                @Override
+                                public void onError(Exception e) {
+                                    Log.e(TAG, "onError: ", e);
+                                }
+                            });
+                        }
                     }
 
                     @Override
-                    public void onFailure(@Nonnull ApolloException e) {
-                        Log.w(TAG, "failure");
+                    public void onError(Exception e) {
+                        Log.e("INIT", "Initialization error.", e);
                     }
-                });
+                }
+        );
     }
+
 
     @Override
     public void onResume() {
@@ -85,15 +135,18 @@ public class MainActivity extends AppCompatActivity implements MyTaskRecyclerVie
         Log.i(TAG, "We are in onResume yay!");
 
         //Check to see if there is a user saved in Shared Preferences
-        SharedPreferences p = PreferenceManager.getDefaultSharedPreferences(this);
-        String name = p.getString("user", "def");
-        Log.i(TAG, name);
+//        SharedPreferences p = PreferenceManager.getDefaultSharedPreferences(this);
+//        String name = p.getString("user", "def");
+//        Log.i(TAG, name);
         TextView user = findViewById(R.id.userTasks);
 
-        if (!name.equals("def")) {
-            String text = name + "'s Tasks";
-            user.setText(text);
-        }
+//        if (!name.equals("def")) {
+//            String text = name + "'s Tasks";
+//            user.setText(text);
+//        }
+
+        String username = AWSMobileClient.getInstance().getUsername();
+        user.setText(username + "'s Tasks");
     }
 
     @Override
