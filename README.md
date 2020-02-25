@@ -30,3 +30,9 @@ Updated the app to connect to an AWS database using Amplify. Add task will now a
 
 ![Homepage](screenshots/amplify.png)
 
+
+### Updated the app on 02-25-2020
+Updated the app to add cognito. User's can now log in and log out of the app as well as create an account.
+
+
+
