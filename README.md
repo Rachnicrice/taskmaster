@@ -38,5 +38,8 @@ Updated the app to add cognito. User's can now log in and log out of the app as 
 ### Updated the app on 02-26-2020
 Updated the app to add S3.
 
+### Updated the app on 02-27-2020
+Added an upload image button and event listener to the add task page. Added an image view to the task detail page.
+
 
 
