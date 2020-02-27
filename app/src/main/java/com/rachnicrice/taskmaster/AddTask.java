@@ -3,7 +3,13 @@ package com.rachnicrice.taskmaster;
 import androidx.appcompat.app.AppCompatActivity;
 
 
+import android.app.Activity;
+import android.content.Intent;
+import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
@@ -27,7 +33,9 @@ import com.apollographql.apollo.exception.ApolloException;
 
 import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileWriter;
+import java.io.IOException;
 
 import javax.annotation.Nonnull;
 
@@ -48,7 +56,8 @@ public class AddTask extends AppCompatActivity {
         View addImage = findViewById(R.id.addImage);
 
         addImage.setOnClickListener((v) -> {
-            uploadWithTransferUtility();
+            Intent i = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+            startActivityForResult(i, 777);
 
         });
 
@@ -96,7 +105,12 @@ public class AddTask extends AppCompatActivity {
         });
     }
 
-    public void uploadWithTransferUtility(){
+    public void uploadWithTransferUtility(Uri uri){
+
+        String[] filePathColumn = {MediaStore.Images.Media.DATA};
+
+        Cursor cursor = getContentResolver().query(uri,
+                filePathColumn, null, null, null);
 
         TransferUtility transferUtility =
                 TransferUtility.builder()
@@ -106,6 +120,7 @@ public class AddTask extends AppCompatActivity {
                         .build();
 
         File file = new File(getApplicationContext().getFilesDir(), "sample.txt");
+
         try {
             BufferedWriter writer = new BufferedWriter(new FileWriter(file));
             writer.append("Howdy World!");
@@ -118,7 +133,7 @@ public class AddTask extends AppCompatActivity {
         TransferObserver uploadObserver =
                 transferUtility.upload(
                         "public/sample.txt",
-                        new File(getApplicationContext().getFilesDir(),"sample.txt"));
+                        new File("sample.txt"));
 
         // Attach a listener to the observer to get state update and progress notifications
         uploadObserver.setTransferListener(new TransferListener() {
@@ -154,5 +169,27 @@ public class AddTask extends AppCompatActivity {
 
         Log.d(TAG, "Bytes Transferred: " + uploadObserver.getBytesTransferred());
         Log.d(TAG, "Bytes Total: " + uploadObserver.getBytesTotal());
+    }
+
+//    Sourced from https://stackoverflow.com/questions/9107900/how-to-upload-image-from-gallery-in-android
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        //Detects request codes
+        if(requestCode == 777 && resultCode == Activity.RESULT_OK) {
+            Uri selectedImage = data.getData();
+            Bitmap bitmap = null;
+            try {
+                bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), selectedImage);
+                uploadWithTransferUtility(selectedImage);
+            } catch (FileNotFoundException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            } catch (IOException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+        }
     }
 }
