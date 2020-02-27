@@ -19,6 +19,10 @@ import com.apollographql.apollo.GraphQLCall;
 import com.apollographql.apollo.api.Response;
 import com.apollographql.apollo.exception.ApolloException;
 
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+
 import javax.annotation.Nonnull;
 
 import type.CreateTaskInput;
@@ -35,6 +39,40 @@ public class AddTask extends AppCompatActivity {
         setContentView(R.layout.activity_add_task);
 
         View submit = findViewById(R.id.submit);
+        View addImage = findViewById(R.id.addImage);
+
+        addImage.setOnClickListener((v) -> {
+
+//            private void uploadFile() {
+//                File sampleFile = new File(getApplicationContext().getFilesDir(), "sample.txt");
+//                try {
+//                    BufferedWriter writer = new BufferedWriter(new FileWriter(sampleFile));
+//                    writer.append("Howdy World!");
+//                    writer.close();
+//                }
+//                catch(Exception e) {
+//                    Log.e("StorageQuickstart", e.getMessage());
+//                }
+//
+//                Amplify.Storage.uploadFile(
+//                        "myUploadedFileName.txt",
+//                        sampleFile.getAbsolutePath(),
+//                        new ResultListener<StorageUploadFileResult>() {
+//                            @Override
+//                            public void onResult(StorageUploadFileResult result) {
+//                                Log.i("StorageQuickStart", "Successfully uploaded: " + result.getKey());
+//                            }
+//
+//                            @Override
+//                            public void onError(Throwable error) {
+//                                Log.e("StorageQuickstart", "Upload error.", error);
+//                            }
+//                        }
+//                );
+//            }
+
+        });
+
 
         mAWSAppSyncClient = AWSAppSyncClient.builder()
                 .context(getApplicationContext())
