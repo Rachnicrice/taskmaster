@@ -27,6 +27,7 @@ import com.amazonaws.mobileconnectors.s3.transferutility.TransferObserver;
 import com.amazonaws.mobileconnectors.s3.transferutility.TransferState;
 import com.amazonaws.mobileconnectors.s3.transferutility.TransferUtility;
 import com.amazonaws.services.s3.AmazonS3Client;
+import com.amazonaws.services.s3.model.CannedAccessControlList;
 import com.apollographql.apollo.GraphQLCall;
 import com.apollographql.apollo.api.Response;
 import com.apollographql.apollo.exception.ApolloException;
@@ -36,6 +37,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.UUID;
 
 import javax.annotation.Nonnull;
 
@@ -111,6 +113,11 @@ public class AddTask extends AppCompatActivity {
 
         Cursor cursor = getContentResolver().query(uri,
                 filePathColumn, null, null, null);
+        cursor.moveToFirst();
+
+        int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
+        String picturePath = cursor.getString(columnIndex);
+        cursor.close();
 
         TransferUtility transferUtility =
                 TransferUtility.builder()
@@ -121,19 +128,11 @@ public class AddTask extends AppCompatActivity {
 
         File file = new File(getApplicationContext().getFilesDir(), "sample.txt");
 
-        try {
-            BufferedWriter writer = new BufferedWriter(new FileWriter(file));
-            writer.append("Howdy World!");
-            writer.close();
-        }
-        catch(Exception e) {
-            Log.e(TAG, e.getMessage());
-        }
-
+        final String uuid = UUID.randomUUID().toString();
         TransferObserver uploadObserver =
                 transferUtility.upload(
-                        "public/sample.txt",
-                        new File("sample.txt"));
+                        "public/" + uuid,
+                        new File (picturePath), CannedAccessControlList.PublicRead);
 
         // Attach a listener to the observer to get state update and progress notifications
         uploadObserver.setTransferListener(new TransferListener() {
