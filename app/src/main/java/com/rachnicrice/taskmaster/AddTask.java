@@ -1,9 +1,19 @@
 package com.rachnicrice.taskmaster;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
 
+import android.Manifest;
+import android.app.Activity;
+import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
@@ -21,13 +31,17 @@ import com.amazonaws.mobileconnectors.s3.transferutility.TransferObserver;
 import com.amazonaws.mobileconnectors.s3.transferutility.TransferState;
 import com.amazonaws.mobileconnectors.s3.transferutility.TransferUtility;
 import com.amazonaws.services.s3.AmazonS3Client;
+import com.amazonaws.services.s3.model.CannedAccessControlList;
 import com.apollographql.apollo.GraphQLCall;
 import com.apollographql.apollo.api.Response;
 import com.apollographql.apollo.exception.ApolloException;
 
 import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileWriter;
+import java.io.IOException;
+import java.util.UUID;
 
 import javax.annotation.Nonnull;
 
@@ -48,8 +62,14 @@ public class AddTask extends AppCompatActivity {
         View addImage = findViewById(R.id.addImage);
 
         addImage.setOnClickListener((v) -> {
-            uploadWithTransferUtility();
+            Intent i = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
 
+            if(ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                    != PackageManager.PERMISSION_GRANTED) {
+                ActivityCompat.requestPermissions(this, new String[] {Manifest.permission.WRITE_EXTERNAL_STORAGE}, 0);
+            } else {
+                startActivityForResult(i, 777);
+            }
         });
 
 
@@ -96,7 +116,17 @@ public class AddTask extends AppCompatActivity {
         });
     }
 
-    public void uploadWithTransferUtility(){
+    public void uploadWithTransferUtility(Uri uri){
+
+        String[] filePathColumn = {MediaStore.Images.Media.DATA};
+
+        Cursor cursor = getContentResolver().query(uri,
+                filePathColumn, null, null, null);
+        cursor.moveToFirst();
+
+        int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
+        String picturePath = cursor.getString(columnIndex);
+        cursor.close();
 
         TransferUtility transferUtility =
                 TransferUtility.builder()
@@ -105,20 +135,11 @@ public class AddTask extends AppCompatActivity {
                         .s3Client(new AmazonS3Client(AWSMobileClient.getInstance()))
                         .build();
 
-        File file = new File(getApplicationContext().getFilesDir(), "sample.txt");
-        try {
-            BufferedWriter writer = new BufferedWriter(new FileWriter(file));
-            writer.append("Howdy World!");
-            writer.close();
-        }
-        catch(Exception e) {
-            Log.e(TAG, e.getMessage());
-        }
-
+        final String uuid = UUID.randomUUID().toString();
         TransferObserver uploadObserver =
                 transferUtility.upload(
-                        "public/sample.txt",
-                        new File(getApplicationContext().getFilesDir(),"sample.txt"));
+                        "public/" + uuid,
+                        new File (picturePath), CannedAccessControlList.PublicRead);
 
         // Attach a listener to the observer to get state update and progress notifications
         uploadObserver.setTransferListener(new TransferListener() {
@@ -126,7 +147,7 @@ public class AddTask extends AppCompatActivity {
             @Override
             public void onStateChanged(int id, TransferState state) {
                 if (TransferState.COMPLETED == state) {
-                    // Handle a completed upload.
+                    Log.i(TAG, "We added an image!");
                 }
             }
 
@@ -154,5 +175,30 @@ public class AddTask extends AppCompatActivity {
 
         Log.d(TAG, "Bytes Transferred: " + uploadObserver.getBytesTransferred());
         Log.d(TAG, "Bytes Total: " + uploadObserver.getBytesTotal());
+    }
+
+//    Sourced from https://stackoverflow.com/questions/9107900/how-to-upload-image-from-gallery-in-android
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        //Detects request codes
+        if(requestCode == 777 && resultCode == Activity.RESULT_OK) {
+            Uri selectedImage = data.getData();
+            uploadWithTransferUtility(selectedImage);
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode,  String[] permissions,  int[] grantResults) {
+        if(requestCode != 0) {
+            return;
+        }
+        if(grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+            Intent i = new Intent(
+                    Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+
+            startActivityForResult(i, 777);
+        }
     }
 }
