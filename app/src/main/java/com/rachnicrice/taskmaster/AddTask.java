@@ -139,7 +139,7 @@ public class AddTask extends AppCompatActivity {
         TransferObserver uploadObserver =
                 transferUtility.upload(
                         "public/" + uuid,
-                        new File (picturePath), CannedAccessControlList.PublicRead);
+                        new File (picturePath));
 
         // Attach a listener to the observer to get state update and progress notifications
         uploadObserver.setTransferListener(new TransferListener() {
